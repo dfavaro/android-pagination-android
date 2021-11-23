@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_feed_avatar_size">64dp</dimen>
+    <dimen name="toolbar_title_margin_top">8dp</dimen>
+    <dimen name="toolbar_title_margin_bottom">8dp</dimen>
+    <dimen name="activity_feed_list_horizontal_margin">16dp</dimen>
+    <dimen name="activity_feed_list_vertical_margin">8dp</dimen>
+    <dimen name="activity_feed_divider_margin_top">16dp</dimen>
+</resources>

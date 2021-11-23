@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Qapital feeds</string>
+    <string name="homepage_title">Activity</string>
+    <string name="no_message">No message</string>
+</resources>
