@@ -2,9 +2,11 @@
 The sample shows how to implement a simple activity feed. The feed should implement fetch as you scroll with a page size of two weeks at a time. If the app doesn't receive any events within that time period it should fetch the next period until we get some events or we reach the oldest activity.
 
 ## Implementation
-The app relies on RxJava.
-
-A simple mocked API is available to get the list of activities and information about them.
+- The app relies on RxJava.
+For Coroutines implementation, please refer to [Coroutines feature branch](https://github.com/dfavaro/android-pagination-sample/tree/feature/coroutines)
+- Multi-Module app relying on a network module ([Retrofit](https://square.github.io/retrofit/)) and a local storage module ([Room](https://developer.android.com/jetpack/androidx/releases/room))
+- [Jetpack Compose](https://developer.android.com/jetpack/compose) is used to display the list of items.
+- A simple mocked API is available to get the list of activities and information about them.
 
 #### Endpoint
 http://qapital-ios-testtask.herokuapp.com
