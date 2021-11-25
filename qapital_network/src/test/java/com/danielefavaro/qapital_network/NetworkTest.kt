@@ -30,7 +30,7 @@ class NetworkTest : BaseNetworkTest() {
 
     @Test
     fun getActivityFeeds() = runBlocking {
-        val response: ActivityListModel = api.getActivityFeeds("2016-10-03T00:00:00+00:00", "2016-10-04T00:00:00+00:00").blockingGet()
+        val response: ActivityListModel = api.getActivityFeeds("2016-10-03T00:00:00+00:00", "2016-10-04T00:00:00+00:00")
         assert(response.oldest == "2016-05-23T02:00:00+00:00".fromApiFormat())
         assert(response.activities[0].userId == 2L)
         assert(response.activities[1].userId == 3L)
@@ -38,7 +38,7 @@ class NetworkTest : BaseNetworkTest() {
 
     @Test
     fun getUser() = runBlocking {
-        val response: UserModel = api.getUser(1L).blockingGet()
+        val response: UserModel = api.getUser(1L)
         assert(response.userId == 1L)
     }
 }

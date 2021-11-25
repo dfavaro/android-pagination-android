@@ -14,11 +14,12 @@ import com.danielefavaro.qapital_network.model.service.QapitalApi
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -58,11 +59,11 @@ class ActivityFeedsSourceMediatorTest {
 
         // Need to mock runInTransaction method cause it returns UndeliverableException -> need investigation about it
         remoteMediator = spyk(remoteMediator)
-        every { remoteMediator.insertToDb(any(), any(), any(), any()) } returns mockk()
+        coEvery { remoteMediator.insertToDb(any(), any(), any(), any()) } returns mockk()
     }
 
     @Test
-    fun refreshLoadReturnsSuccessResultWhenMoreDataIsPresent() {
+    fun refreshLoadReturnsSuccessResultWhenMoreDataIsPresent() = runBlocking {
         mockApi()
         val pagingState = PagingState<Int, ActivityFeedModel>(
             listOf(),
@@ -70,13 +71,13 @@ class ActivityFeedsSourceMediatorTest {
             PagingConfig(10),
             10
         )
-        val result = remoteMediator.loadSingle(LoadType.REFRESH, pagingState).blockingGet()
+        val result = remoteMediator.load(LoadType.REFRESH, pagingState)
         assert(result is RemoteMediator.MediatorResult.Success)
         assert((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached.not())
     }
 
     @Test
-    fun refreshLoadSuccessAndEndOfPaginationWhenNoMoreData() {
+    fun refreshLoadSuccessAndEndOfPaginationWhenNoMoreData() = runBlocking {
         unmockApi()
         val pagingState = PagingState<Int, ActivityFeedModel>(
             listOf(),
@@ -84,7 +85,7 @@ class ActivityFeedsSourceMediatorTest {
             PagingConfig(10),
             10
         )
-        val result = remoteMediator.loadSingle(LoadType.REFRESH, pagingState).blockingGet()
+        val result = remoteMediator.load(LoadType.REFRESH, pagingState)
         assert(result is RemoteMediator.MediatorResult.Success)
         assert((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
     }
@@ -93,59 +94,57 @@ class ActivityFeedsSourceMediatorTest {
         val mockDate: Date = mockk()
         every { mockDate.time } returns 0L
 
-        every { qapitalApi.getActivityFeeds(any(), any()) } returns Single.just(ActivityListModel(mockDate, emptyList()))
+        coEvery { qapitalApi.getActivityFeeds(any(), any()) } returns ActivityListModel(mockDate, emptyList())
     }
 
     private fun mockApi() {
         val mockDate: Date = mockk()
         every { mockDate.time } returns 0L
 
-        every { qapitalApi.getActivityFeeds(any(), any()) } returns Single.just(
-            ActivityListModel(
-                mockDate, listOf(
-                    com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
-                        message = "Message 6",
-                        timestamp = mockk(),
-                        amount = 0.0,
-                        userId = 0L
-                    ),
-                    com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
-                        message = "Message 5",
-                        timestamp = mockk(),
-                        amount = 0.0,
-                        userId = 0L
-                    ),
-                    com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
-                        message = "Message 4",
-                        timestamp = mockk(),
-                        amount = 0.0,
-                        userId = 0L
-                    ),
-                    com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
-                        message = "Message 3",
-                        timestamp = mockk(),
-                        amount = 0.0,
-                        userId = 0L
-                    ),
-                    com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
-                        message = "Message 2",
-                        timestamp = mockk(),
-                        amount = 0.0,
-                        userId = 0L
-                    ),
-                    com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
-                        message = "Message 1",
-                        timestamp = mockk(),
-                        amount = 0.0,
-                        userId = 0L
-                    ),
-                    com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
-                        message = "Message 0",
-                        timestamp = mockk(),
-                        amount = 0.0,
-                        userId = 0L
-                    ),
-                )
+        coEvery { qapitalApi.getActivityFeeds(any(), any()) } returns ActivityListModel(
+            mockDate, listOf(
+                com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
+                    message = "Message 6",
+                    timestamp = mockk(),
+                    amount = 0.0,
+                    userId = 0L
+                ),
+                com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
+                    message = "Message 5",
+                    timestamp = mockk(),
+                    amount = 0.0,
+                    userId = 0L
+                ),
+                com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
+                    message = "Message 4",
+                    timestamp = mockk(),
+                    amount = 0.0,
+                    userId = 0L
+                ),
+                com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
+                    message = "Message 3",
+                    timestamp = mockk(),
+                    amount = 0.0,
+                    userId = 0L
+                ),
+                com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
+                    message = "Message 2",
+                    timestamp = mockk(),
+                    amount = 0.0,
+                    userId = 0L
+                ),
+                com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
+                    message = "Message 1",
+                    timestamp = mockk(),
+                    amount = 0.0,
+                    userId = 0L
+                ),
+                com.danielefavaro.qapital_network.model.entity.ActivityFeedModel(
+                    message = "Message 0",
+                    timestamp = mockk(),
+                    amount = 0.0,
+                    userId = 0L
+                ),
             )
         )
     }

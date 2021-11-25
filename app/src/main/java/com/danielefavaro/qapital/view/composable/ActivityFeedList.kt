@@ -16,12 +16,11 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.danielefavaro.qapital.R
 import com.danielefavaro.qapital.viewmodel.ActivityFeedViewModel
-import kotlinx.coroutines.reactive.asFlow
 
 @Composable
 fun ActivityFeedList(viewModel: ActivityFeedViewModel = viewModel()) {
 
-    val lazyPagingItems = viewModel.feedList.asFlow().collectAsLazyPagingItems()
+    val lazyPagingItems = viewModel.feedList.collectAsLazyPagingItems()
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.activity_feed_list_vertical_margin)),

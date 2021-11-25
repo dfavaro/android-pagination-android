@@ -2,8 +2,6 @@
 The sample shows how to implement a simple activity feed. The feed should implement fetch as you scroll with a page size of two weeks at a time. If the app doesn't receive any events within that time period it should fetch the next period until we get some events or we reach the oldest activity.
 
 ## Implementation
-The app relies on RxJava.
-
 A simple mocked API is available to get the list of activities and information about them.
 
 #### Endpoint

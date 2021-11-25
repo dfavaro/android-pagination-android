@@ -12,7 +12,6 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.BufferedReader
 import java.io.InputStream
@@ -32,7 +31,6 @@ class MockNetworkModule {
     fun provideApi(okHttpClient: OkHttpClient, serverConfig: WebServerConfig): QapitalApi = Retrofit.Builder()
         .baseUrl("http://localhost:${serverConfig.port}")
         .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .client(okHttpClient)
         .build()
         .create(QapitalApi::class.java)
