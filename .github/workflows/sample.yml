@@ -1,0 +1,32 @@
+name: Google Play Alpha
+
+on: 
+  workflow_dispatch:
+    inputs:
+      config:
+        description: 'Build config'     
+        required: true
+        default: 'release' 
+        type: choice
+        options:
+        - debug
+        - release
+      flavor:
+        description: 'Flavor'
+        required: true 
+        type: choice
+        options:
+        - qa1
+        - prod
+
+jobs:
+  log-the-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Build config: $CONFIG"
+          echo "Flavor: $FLAVOR"
+        env:
+          CONFIG: ${{ inputs.config }}
+          FLAVOR: ${{ inputs.flavor }}
+				
