@@ -23,16 +23,21 @@ jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "Build config: $CONFIG"
-          echo "Flavor: $FLAVOR"
+      - uses: actions/checkout@v3
+      - name: build-and-publish
         env:
-          CONFIG: ${{ inputs.config }}
-          FLAVOR: ${{ inputs.flavor }}
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v3
-      - name: Build the app
-        run: ./gradlew build
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          GOOGLE_PLAY_ANDROID_DEVELOPER_BASE64: ${{ secrets.GOOGLE_PLAY_ANDROID_DEVELOPER_BASE64 }}
+          GRADLE_CACHE_USERNAME: ${{ secrets.GRADLE_CACHE_USERNAME }}
+          GRADLE_CACHE_PASSWORD: ${{ secrets.GRADLE_CACHE_PASSWORD }}
+          RELEASE_JOB: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHANGELOG: ${{ github.event.client_payload.changelog }}
+        run: |
+          echo $KEYSTORE_BASE64 | base64 --decode > keystores/release.keystore
+          echo $GOOGLE_PLAY_ANDROID_DEVELOPER_BASE64 | base64 --decode > keystores/google-play-android-developer.json
+          ./gradlew generateChangelog -s
+          ./gradlew publishProductionIntegrationsReleaseBundle -Ptrack=alpha -PreleaseStatus=completed -s
