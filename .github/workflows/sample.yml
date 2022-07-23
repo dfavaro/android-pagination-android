@@ -29,4 +29,3 @@ jobs:
         env:
           CONFIG: ${{ inputs.config }}
           FLAVOR: ${{ inputs.flavor }}
-				
